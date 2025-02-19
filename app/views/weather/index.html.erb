@@ -1,0 +1,38 @@
+<h1>Weather Forecast</h1>
+
+<%= form_with url: weather_path, method: :get, local: true do %>
+  <label for="address">Enter Address:</label>
+  <%= text_field_tag :address, params[:address], placeholder: "e.g., New York, NY", id: "address_input" %>
+  <%= submit_tag "Get Weather" %>
+  <%= button_tag "Clear", type: "button", id: "clear_button" %>
+<% end %>
+
+<div id="weather_result">
+  <% if @forecast %>
+    <h2>Weather for <%= params[:address] %></h2>
+    <% if @forecast[:error] %>
+      <p style="color: red;"><%= @forecast[:error] %></p>
+    <% else %>
+      <p><strong> > Temperature:</strong> <%= @forecast[:temperature] %>°C</p>
+      <p><strong> > High:</strong> <%= @forecast[:high] %>°C</p>
+      <p><strong> > Low:</strong> <%= @forecast[:low] %>°C</p>
+      <p><strong>Condition:</strong> <%= @forecast[:condition] %></p>
+      <% if @forecast[:cached] %>
+        <p style="color: green;"> **** Data loaded from cache ****</p>
+      <% else %>
+        <p style="color: blue;"> **** Data fetched from API ****</p>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("clear_button").addEventListener("click", function() {
+      document.getElementById("address_input").value = "";  // Clear input field
+      document.getElementById("weather_result").innerHTML = "";  // Remove weather result
+    });
+  });
+</script>
+
+
